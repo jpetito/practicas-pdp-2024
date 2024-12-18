@@ -1,0 +1,85 @@
+import empleados.*
+import lenguaje.*
+import evento.*
+
+const fiesta = new Evento()
+
+describe "primera parte"{
+	const c = new LenguajeProgramacion(anioCreacion = 1972) //lenguaje antiguo
+	const wololo = new LenguajeProgramacion(anioCreacion = 2016)
+	const assembler = new LenguajeProgramacion(anioCreacion = 1949)
+
+	//empleado 
+	const empleado = new Desarrollador()
+
+	test "un jefe toma a cargo a un empleado" {
+	// const empleado = new Infraestructura(experiencia = 10)
+    const jefe = new Jefe()
+ 
+
+    jefe.tomarCargo(empleado)
+
+	assert.that(jefe.consultarPorEmpleado(empleado))
+	}
+
+	test "un empleado aprendio a programar en un lenguaje" {
+
+		empleado.aprenderLenguaje(wololo)
+		
+
+	assert.that(empleado.aprendioLenguaje(wololo))
+
+	}
+
+	test "un empleado esta invitado al festejo"{
+
+		empleado.aprenderLenguaje(c)
+		empleado.aprenderLenguaje(wololo)
+		fiesta.invitar(empleado)
+
+	assert.that(fiesta.estaInvitado(empleado))
+	}
+
+	test "mostrar invitados del festejo"{
+		const empleado1 = new Desarrollador(lenguajesQueSepan = #{c})
+		// const c = new LenguajeProgramacion(anioCreacion = 1972)
+		empleado1.aprenderLenguaje(c)
+		// const empleado2 = new Infraestructura(experiencia = 12)
+
+		fiesta.invitar(empleado1)
+		// fiesta.invitar(empleado2)
+
+		assert.equals(#{empleado1}, fiesta.invitados())
+	}
+
+}
+
+describe "segunda parte" {
+	const c = new LenguajeProgramacion(anioCreacion = 1972) //lenguaje antiguo
+	const wololo = new LenguajeProgramacion(anioCreacion = 2016)
+	const assembler = new LenguajeProgramacion(anioCreacion = 1949)
+
+// 	test "registrar la asistencia de una persona al evento"{
+// 	const empleado = new Desarrollador()
+//  //puede ingresar ya que sabe al menos un lenguaje antiguo
+
+// 		fiesta.invitar(empleado)
+// 		empleado.asistir(fiesta)
+// 		fiesta.registrarAsistencia(empleado)
+
+// 	assert.that(fiesta.llego(empleado))		
+// 	}
+
+//	test "balance de la fiesta"
+// :) juli relocamal  
+	const juli = new Desarrollador(lenguajesQueSepan = #{c, wololo}) // mesa 1
+	const luna = new Desarrollador(lenguajesQueSepan = #{c, wololo}) //mesa 1
+	const tumama = new Desarrollador(lenguajesQueSepan = #{c, assembler}) //tiene mesa 2
+	const tumama1 = new Desarrollador(lenguajesQueSepan = #{c, assembler})
+	const tumama2 = new Desarrollador(lenguajesQueSepan = #{c, assembler})
+	const fiesta1 = new Evento (invitadosPresentes = #{juli, luna, tumama})
+
+	test "Mesa com mayor invitados Mesa" {
+		assert.equals(2, fiesta1.mesaMayorCantidadPersonas())
+	}
+}

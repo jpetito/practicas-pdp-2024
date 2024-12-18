@@ -1,0 +1,110 @@
+import nene.*
+import adultos.*
+import elementos.*
+import legion.*
+import barrio.*
+import salud.*
+
+// base de datos 
+            //elementos
+    const payaso = new Maquillaje() //3
+    const princesa = new Maquillaje()//3
+    const conejo = new TrajeTierno() //2
+    const sullivan = new TrajeTierno()//2
+    const bruja = new TrajeTerrorifico() //5
+    const jason = new TrajeTerrorifico()//5
+
+        //nenes
+    const pepito = new Nene(elementosPuestos = (#{payaso, sullivan}), actitud = 10, caramelos = 1)
+    const juana = new Nene(elementosPuestos = (#{princesa, jason}), actitud = 15, caramelos = 15) //40 capacidad
+    const nico = new Nene(elementosPuestos = (#{}), actitud = 0, caramelos = 6)
+    const lara = new Nene(elementosPuestos = (#{}), actitud = 0, caramelos = 0)
+
+        // legion
+    const legion = new Legion(nenes = #{pepito, juana, nico})
+
+    //adulto
+    const comun= new Comun(bolsaCaramelos = 10, nenesPesados = [juana]) //tolerancia 0
+
+
+
+
+describe "Sustos: PARTE A" {
+  test "obtener capacidad de asustar de pepito" {
+    assert.equals(50, pepito.capacidadDeAsustar())
+  }
+
+  test "tolerancia de un adulto comun sin nenes pesados"{
+    assert.equals(10, comun.tolerancia())
+  }
+  test "adulto comun se asusta con pepito"{
+    assert.that(comun.seAsustaCon(pepito))
+  }
+
+  test "hacer que pepito intente asustar a un adulto normal y lo asusta"{
+    pepito.intentarAsustar(comun, 5)
+    assert.equals(6, pepito.cantCaramelos())
+  }
+
+    test "nico intenta asustar a un adulto y no puede"{
+    assert.throwsExceptionWithMessage("El adulto no se asusto", { nico.intentarAsustar(comun, 5) })
+  } 
+
+}
+
+describe "Legiones: PARTE B" {
+    const legionNueva = new Legion()
+  test "se quieren crear una legion con juana y falla" {
+    assert.throwsExceptionWithMessage("Se necesitan al menos dos nenes", { legionNueva.crear(#{juana}) })
+  }
+
+  test "crea una legion con juana y pepito" {
+    legionNueva.crear(#{juana, pepito})
+    assert.equals(#{juana, pepito}, legionNueva.miembros())
+  }
+
+test "juana es lider de la legion"{
+    assert.equals(juana, legion.lider()) 
+}
+test "legion intenta asustar a una persona, obtienen caramelos" {
+  legion.intentarAsustar(comun, 5)
+  assert.equals(20, juana.cantCaramelos()) //se lo queda juana porque es lider de la legion
+}
+
+}
+
+// describe "Barrio: PARTE C" {
+//     const banfield = new Barrio(habitantes = #{pepito, juana, lara, nico})
+//   test "los tres nenes que mas caramelos tienen de banfield" {
+//     var resultado = banfield.tresNenesConMasCaramelos()
+    
+//     assert.equals([pepito, juana, nico], banfield.tresNenesConMasCaramelos())
+//   }
+// }
+
+describe "Alimentacion: Parte D" {
+  test "pepito quiere comer 10 caramelos pero no los tiene" {
+    
+    assert.throwsExceptionWithMessage("No tiene esa cantidad de caramelos", { pepito.comerCaramelos(10) })
+  }
+
+  test "juana come 10 caramelos y se empacha"{
+    juana.comerCaramelos(10)    
+
+    assert.equals(empachado, juana.salud())
+    assert.equals(5, juana.cantCaramelos())
+  }
+    test "juana ya estaba empachada y come 10 caramelos mas y queda en cama"{
+    juana.empachate()
+    juana.comerCaramelos(10)
+
+    assert.equals(enCama, juana.salud())
+    assert.equals(5, juana.cantCaramelos())
+    }
+
+    test "juana esta en cama y quiere comer 10 caramelos mas y no puede"{
+    juana.poneteEnCama()
+
+    assert.throwsExceptionWithMessage("No puede comer más caramelos", { juana.comerCaramelos(10) })
+    }
+}
