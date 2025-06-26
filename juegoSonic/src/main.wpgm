@@ -1,0 +1,25 @@
+import wollok.game.*
+import direcciones.* 
+import agarrables.*
+import enemigos.*
+import sonic.* 
+import jueguito.*
+import fondo.*
+import escenarios.*
+
+
+// PROGRAMA PRINCIPAL
+program SonicGame{
+    game.title("Sonic Game")
+    game.height(20)
+    game.width(30)
+    game.cellSize(32)
+
+
+    // inicia el juego
+    juego.iniciar()
+    
+}
+
+
+

@@ -1,0 +1,38 @@
+import wollok.game.*
+import sonic.*
+import jueguito.*
+import enemigos.*
+import agarrables.*
+import escenarios.*
+
+
+describe "Enemigos" {
+	method initialize() {
+		//gameEngine.configurarParaTest()
+		juego.iniciar()
+		//juego.musicaFondo().play()
+		game.clear()
+		juego.iniciarNivel(new Nivel1())
+	}
+    method testearColisionYDesaparicion(personaje, enemigo){
+        personaje.agarrar(enemigo)
+        assert.notThat(juego.hasVisual(enemigo))
+    }
+
+	test "Cuando un enemigo choca contra sonic desaparece"{
+        self.testearColisionYDesaparicion(sonic, new Pez(position = juego.posicionAleatoria()))
+        self.testearColisionYDesaparicion(sonic, new Cangrejo(position = juego.posicionAleatoria()))
+        self.testearColisionYDesaparicion(sonic, new Avispa(position = juego.posicionAleatoria()))
+    }
+
+    test "Cuando un enemigo choca contra sonic y este esta rodando, el enemigo desaparece"{
+        sonic.agarrar(new Pocion(position = juego.posicionAleatoria(), tipo = poder))
+        sonic.empezarARodar()
+
+        self.testearColisionYDesaparicion(sonic, new Pez(position = juego.posicionAleatoria()))
+        self.testearColisionYDesaparicion(sonic, new Cangrejo(position = juego.posicionAleatoria()))
+        self.testearColisionYDesaparicion(sonic, new Avispa(position = juego.posicionAleatoria()))
+    }
+
+    
+}

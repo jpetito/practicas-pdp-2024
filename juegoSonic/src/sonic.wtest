@@ -1,0 +1,66 @@
+import main.*
+import wollok.game.*
+import direcciones.* 
+import agarrables.*
+import enemigos.*
+import sonic.* 
+import fondo.*
+import jueguito.*
+import escenarios.*
+
+describe "Sonic" {
+	method initialize() {
+		//gameEngine.configurarParaTest()
+		juego.iniciar()
+		//juego.musicaFondo().play()
+		game.clear()
+		juego.iniciarNivel(new Nivel1())
+	}
+
+	test "Agarrar una moneda incrementa la cantidad de monedas de Sonic" {
+		sonic.agarrar(new Moneda(position = juego.posicionAleatoria()))
+		assert.equals(1, sonic.cantMonedas())
+	}
+	test "Sonic pierde una vida cuando choca con un pez" {
+		sonic.agarrar(new Pez(position = juego.posicionAleatoria()))
+		assert.equals(2, sonic.vida())
+	}
+	test "Sonic pierde una vida cuando choca con un cangrejo" {
+		sonic.agarrar(new Cangrejo(position = juego.posicionAleatoria()))
+		assert.equals(2, sonic.vida())
+	}
+	test "Sonic pierde una vida y una moneda cuando choca con una Avispa" {
+		sonic.agarrar(new Moneda(position = juego.posicionAleatoria()))
+		assert.equals(1, sonic.cantMonedas())
+
+		sonic.agarrar(new Avispa(position = juego.posicionAleatoria()))
+		assert.equals(2, sonic.vida())
+	}
+	test "Cuando agarra una pocion de vida, Sonic recupera una vida, y si las tenia todas no recupera nada" {
+		sonic.agarrar(new Pez(position = juego.posicionAleatoria()))
+		sonic.agarrar(new Pocion(position = juego.posicionAleatoria(), tipo = sumaVida))
+		assert.equals(3, sonic.vida())
+
+		sonic.agarrar(new Pocion(position = juego.posicionAleatoria(), tipo = sumaVida))
+		assert.equals(3, sonic.vida())
+	}
+	test "Cuando agarra una pocion de poder, Sonic puede rodar, y su lo hace gasta esa poción" {
+		sonic.agarrar(new Pocion(position = juego.posicionAleatoria(), tipo = poder))
+		sonic.empezarARodar()
+		assert.that(sonic.estaRodando())
+		assert.equals(0, sonic.cantPocionesPoder())
+	}
+	test "Sonic gana el juego al llegar a 15 monedas y aparece el cartel youWin" {
+		sonic.cantMonedas(14)
+		sonic.agarrar(new Moneda(position = juego.posicionAleatoria()))
+		assert.equals((new Win()).toString(), juego.portada().toString())
+	}
+	test "Sonic pierde todas las vidas (3) y aparece el cartel gameOver" {
+		sonic.vida(1)
+		sonic.agarrar(new Pez(position = juego.posicionAleatoria()))
+		assert.equals((new GameOver()).toString(), juego.portada().toString())
+	}
+}
+
+
+
